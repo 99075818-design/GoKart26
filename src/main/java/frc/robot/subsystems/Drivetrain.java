@@ -66,6 +66,13 @@ public class Drivetrain extends SubsystemBase {
     bottomRightBackMotor.configure(brbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
+  public void tankDrive(double leftSpeed, double rightSpeed) {
+    drive.tankDrive(
+        leftSpeed * Constants.MaxDriveSpeed, 
+        rightSpeed * Constants.MaxDriveSpeed
+    );
+  }
+
   public void drive(double speed, double rotation) {
     boolean allowTurnInPlace = (Math.abs(speed) < 0.05);
 

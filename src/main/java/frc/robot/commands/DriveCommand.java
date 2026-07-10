@@ -25,17 +25,26 @@ public class DriveCommand extends Command {
 
   @Override
   public void execute() {
-    double speed = 0.0;
+    double baseSpeed = 0.0;
 
     if (wheelcontroller.getRawButton(Constants.kForwardButtonY)) {
-      speed = 1.0; 
+      baseSpeed = 1.0; 
     } else if (wheelcontroller.getRawButton(Constants.kReverseButtonB)) {
-      speed = -1.0; 
+      baseSpeed = -1.0; 
     }
 
     double rotation = wheelcontroller.getX();
 
-    drivetrain.drive(speed, rotation);
+    double leftSpeed = baseSpeed;
+    double rightSpeed = baseSpeed;
+
+    if (rotation > 0) {
+      rightSpeed = baseSpeed * (1.0 - rotation);
+    } else if (rotation < 0) {
+      leftSpeed = baseSpeed * (1.0 - Math.abs(rotation));
+    }
+
+    drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
 
   @Override
