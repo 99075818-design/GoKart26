@@ -18,4 +18,9 @@ public class Constants {
 
     public static final double MaxDriveSpeed = 0.5;
     public static final double MaxTurnSpeed = 0.5;
+
+    public static final int kDriverControllerPort = 0; 
+
+    public static final int kForwardButtonY = 4;
+    public static final int kReverseButtonB = 2;
 }

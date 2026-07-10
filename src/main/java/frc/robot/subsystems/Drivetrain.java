@@ -13,16 +13,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
-  private SparkMax topLeftFrontMotor;
-  private SparkMax topRightFrontMotor;
-  private SparkMax bottomLeftFrontMotor;
-  private SparkMax bottomRightFrontMotor;
-  private SparkMax topLeftBackMotor;
-  private SparkMax topRightBackMotor;
-  private SparkMax bottomLeftBackMotor;
-  private SparkMax bottomRightBackMotor;
+  private final SparkMax topLeftFrontMotor;
+  private final SparkMax topRightFrontMotor;
+  
+  private final SparkMax bottomLeftFrontMotor;
+  private final SparkMax bottomRightFrontMotor;
+  private final SparkMax topLeftBackMotor;
+  private final SparkMax topRightBackMotor;
+  private final SparkMax bottomLeftBackMotor;
+  private final SparkMax bottomRightBackMotor;
 
-  private DifferentialDrive drive;
+  private final DifferentialDrive drive;
 
   public Drivetrain() {
     topLeftFrontMotor = new SparkMax(Constants.TLFMID, MotorType.kBrushed);
@@ -57,16 +58,22 @@ public class Drivetrain extends SubsystemBase {
     brbConfig.follow(topRightFrontMotor);
 
     topRightFrontMotor.configure(trfConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    bottomLeftFrontMotor.configure(trfConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    bottomRightFrontMotor.configure(trfConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    topLeftBackMotor.configure(trfConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    topRightBackMotor.configure(trfConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    bottomLeftBackMotor.configure(trfConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    bottomRightBackMotor.configure(trfConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    bottomLeftFrontMotor.configure(blfConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    bottomRightFrontMotor.configure(brfConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    topLeftBackMotor.configure(tlbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    topRightBackMotor.configure(trbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    bottomLeftBackMotor.configure(blbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    bottomRightBackMotor.configure(brbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-  public void drive(double speed, double rotation){
-    drive.arcadeDrive(speed * Constants.MaxDriveSpeed, rotation * Constants.MaxTurnSpeed);
+  public void drive(double speed, double rotation) {
+    boolean allowTurnInPlace = (Math.abs(speed) < 0.05);
+
+    drive.curvatureDrive(
+        speed * Constants.MaxDriveSpeed, 
+        rotation * Constants.MaxTurnSpeed, 
+        allowTurnInPlace
+    );
   }
 
   public void stop(){
@@ -75,6 +82,5 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 }

@@ -4,17 +4,29 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.Drivetrain;
 
 public class RobotContainer {
+  private final Drivetrain m_Drivetrain;
+  private final Joystick m_driverController = new Joystick(Constants.kDriverControllerPort);
+
   public RobotContainer() {
+    m_Drivetrain = new Drivetrain();
+    
+    m_Drivetrain.setDefaultCommand(
+        new DriveCommand(m_Drivetrain, m_driverController)
+    );
+
     configureBindings();
   }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+  }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return m_Drivetrain.runOnce(m_Drivetrain::stop);
   }
 }
